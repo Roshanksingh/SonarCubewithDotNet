@@ -1,0 +1,22 @@
+# Visual Studio files
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build output
+bin/
+obj/
+
+# Rider
+.idea/
+
+# Logs
+*.log
+
+# Test results
+TestResults/
+
+# SonarQube
+.sonar/
