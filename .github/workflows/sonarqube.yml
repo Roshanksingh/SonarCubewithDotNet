@@ -32,11 +32,9 @@ jobs:
         fetch-depth: 0
 
 
-    # Install .NET
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
+    # .NET
+    - name: Check .NET SDK
+      run: dotnet --info
 
 
     # Install SonarScanner for .NET
