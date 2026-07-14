@@ -398,52 +398,6 @@ Keep the terminal open.
 
 ---
 
-# GitHub Actions Example
-
-`.github/workflows/build.yml`
-
-```yaml
-name: Build and SonarQube Analysis
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  build:
-    runs-on: self-hosted
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 9.0.x
-
-      - name: Restore
-        run: dotnet restore
-
-      - name: SonarQube Begin
-        run: |
-          dotnet sonarscanner begin `
-          /k:"SonarCubewithDotNet" `
-          /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" `
-          /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-
-      - name: Build
-        run: dotnet build --no-restore
-
-      - name: SonarQube End
-        run: |
-          dotnet sonarscanner end `
-          /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-```
-
----
-
 # Docker Usage
 
 ## Build Application Image
