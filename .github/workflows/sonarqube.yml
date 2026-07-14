@@ -69,3 +69,9 @@ jobs:
       run: |
         dotnet sonarscanner end `
           /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+
+    - name: Check Quality Gate
+      uses: SonarSource/sonarqube-quality-gate-action@master
+      timeout-minutes: 5
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
