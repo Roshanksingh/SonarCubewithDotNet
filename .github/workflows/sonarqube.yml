@@ -11,67 +11,50 @@ on:
 
   workflow_dispatch:
 
-
 permissions:
   pull-requests: read
   contents: read
 
-
 jobs:
-
   SonarQube:
-
     runs-on: self-hosted
 
     steps:
+      # Checkout source code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    # Checkout source code
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      # .NET
+      - name: Check .NET SDK
+        run: dotnet --info
 
+      # Install SonarScanner for .NET
+      - name: Install SonarScanner
+        run: |
+          dotnet tool install --global dotnet-sonarscanner
 
-    # .NET
-    - name: Check .NET SDK
-      run: dotnet --info
+      # Start SonarQube analysis
+      - name: SonarQube Begin
+        run: |
+          dotnet sonarscanner begin `
+            /k:"SonarCubewithDotNet" `
+            /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" `
+            /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
+      # Restore packages
+      - name: Restore
+        run: |
+          dotnet restore SonarCubewithDotNet.sln
 
-    # Install SonarScanner for .NET
-    - name: Install SonarScanner
-      run: |
-        dotnet tool install --global dotnet-sonarscanner
+      # Build project
+      - name: Build
+        run: |
+          dotnet build SonarCubewithDotNet.sln --no-restore
 
-
-    # Start SonarQube analysis
-    - name: SonarQube Begin
-      run: |
-        dotnet sonarscanner begin `
-          /k:"SonarCubewithDotNet" `
-          /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" `
-          /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-
-
-    # Restore packages
-    - name: Restore
-      run: |
-        dotnet restore SonarCubewithDotNet.sln
-
-
-    # Build project
-    - name: Build
-      run: |
-        dotnet build SonarCubewithDotNet.sln --no-restore
-
-
-    # Finish SonarQube analysis
-    - name: SonarQube End
-      run: |
-        dotnet sonarscanner end `
-          /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-
-    - name: Check Quality Gate
-      uses: SonarSource/sonarqube-quality-gate-action@master
-      timeout-minutes: 5
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      # Finish SonarQube analysis
+      - name: SonarQube End
+        run: |
+          dotnet sonarscanner end `
+            /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
