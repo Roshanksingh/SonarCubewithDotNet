@@ -1,1 +1,0 @@
-hR[C:\Users\itsro\Downloads\SonarCubewithDotNet\SonarCubewithDotNet\SonarCubewithDotNet.csprojòCSharp13

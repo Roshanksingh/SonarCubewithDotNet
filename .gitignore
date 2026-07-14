@@ -20,3 +20,12 @@ TestResults/
 
 # SonarQube
 .sonar/
+
+# SonarQube
+.sonarqube/
+
+# Visual Studio
+.vs/
+
+# User settings
+*.user
